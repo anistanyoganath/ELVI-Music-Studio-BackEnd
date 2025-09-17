@@ -1,0 +1,58 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mongodb"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id        String   @id @default(auto()) @map("_id") @db.ObjectId
+    name      String
+    email     String   @unique
+    phone     String?
+    password  String
+    role      UserRole @default(CUSTOMER) // CUSTOMER or STAFF
+    rentals   Rental[] // Relation to Rentals
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Item {
+    id          String   @id @default(auto()) @map("_id") @db.ObjectId
+    name        String
+    category    String // e.g. Guitar, Drum, Keyboard
+    description String?
+    brand       String?
+    pricePerDay Float // Rental price per day
+    isAvailable Boolean  @default(true)
+    rentals     Rental[] // Relation to Rentals
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
+
+model Rental {
+    id        String       @id @default(auto()) @map("_id") @db.ObjectId
+    user      User         @relation(fields: [userId], references: [id])
+    userId    String       @db.ObjectId
+    item      Item         @relation(fields: [itemId], references: [id])
+    itemId    String       @db.ObjectId
+    startDate DateTime
+    endDate   DateTime
+    totalCost Float
+    status    RentalStatus @default(ACTIVE) // ACTIVE, COMPLETED, CANCELLED
+    createdAt DateTime     @default(now())
+    updatedAt DateTime     @updatedAt
+}
+
+enum UserRole {
+    CUSTOMER
+    STAFF
+}
+
+enum RentalStatus {
+    ACTIVE
+    COMPLETED
+    CANCELLED
+}
