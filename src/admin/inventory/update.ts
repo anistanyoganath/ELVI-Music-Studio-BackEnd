@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { prisma } from "../../DB/prisma_client";
+import { prisma } from "../../../DB/prisma_client";
 
 const updateItem = Router();
 

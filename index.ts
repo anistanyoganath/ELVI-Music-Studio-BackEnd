@@ -1,12 +1,12 @@
 import express, { Request, Response } from "express";
-import InventoryRoutes from "./src/inventory/routes";
+import CustomerRoutes from "./src/customer/routes";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-app.use("/inventory", InventoryRoutes);
+app.use("/customer", CustomerRoutes);
 
 // Sample route
 app.get("/", (req: Request, res: Response) => {
