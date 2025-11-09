@@ -19,6 +19,16 @@ model User {
     updatedAt DateTime @updatedAt
 }
 
+model Admin {
+    id        String   @id @default(auto()) @map("_id") @db.ObjectId
+    name      String
+    email     String   @unique
+    password  String
+    role      String   @default("ADMIN")
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
 model Item {
     id          String   @id @default(auto()) @map("_id") @db.ObjectId
     name        String
@@ -49,6 +59,7 @@ model Rental {
 enum UserRole {
     CUSTOMER
     STAFF
+    ADMIN
 }
 
 enum RentalStatus {
