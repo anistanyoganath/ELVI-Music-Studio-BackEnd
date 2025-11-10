@@ -1,13 +1,17 @@
 import { Router } from "express";
 import { prisma } from "../../../DB/prisma_client";
+import { Prisma } from "@prisma/client";
 
 const addItem = Router();
 
 addItem.post("/", async (req, res) => {
-  const data = req.body;
+  const data: Prisma.ItemCreateInput = req.body;
 
-  const items = await prisma.item.create({
-    data,
+  await prisma.item.create({
+    data: {
+      ...data,
+      dateOfPurchase: new Date(data.dateOfPurchase!),
+    },
   });
 
   res.send(200);

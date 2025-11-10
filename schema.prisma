@@ -30,16 +30,21 @@ model Admin {
 }
 
 model Item {
-    id          String   @id @default(auto()) @map("_id") @db.ObjectId
-    name        String
-    category    String // e.g. Guitar, Drum, Keyboard
-    description String?
-    brand       String?
-    pricePerDay Float // Rental price per day
-    isAvailable Boolean  @default(true)
-    rentals     Rental[] // Relation to Rentals
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
+    id              String    @id @default(auto()) @map("_id") @db.ObjectId
+    name            String
+    category        String // e.g. Guitar, Drum, Keyboard
+    description     String?
+    brand           String?
+    countryOfOrigin String? // New: origin country
+    dateOfPurchase  DateTime? // New: when purchased
+    purchasedCost   Float? // New: cost at purchase
+    warrantyPeriod  String? // New: text like "2 years"
+    purchaser       String? // New: person or entity who bought it
+    pricePerDay     Float
+    isAvailable     Boolean   @default(true)
+    rentals         Rental[] // Relation to Rentals
+    createdAt       DateTime  @default(now())
+    updatedAt       DateTime  @updatedAt
 }
 
 model Rental {
