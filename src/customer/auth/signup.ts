@@ -31,6 +31,9 @@ Signup.post("/", async (req: Request, res: Response) => {
         name: firstName,
         email,
         password: hashedPassword,
+        role: "customer",
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       select: {
         id: true,

@@ -1,74 +1,69 @@
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "mongodb"
-    url      = env("DATABASE_URL")
-}
-
-model User {
-    id        String   @id @default(auto()) @map("_id") @db.ObjectId
-    name      String
-    email     String   @unique
-    phone     String?
-    password  String
-    role      UserRole @default(CUSTOMER) // CUSTOMER or STAFF
-    rentals   Rental[] // Relation to Rentals
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
 }
 
 model Admin {
-    id        String   @id @default(auto()) @map("_id") @db.ObjectId
-    name      String
-    email     String   @unique
-    password  String
-    role      String   @default("ADMIN")
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @db.Date
+  email     String   @unique
+  name      String
+  password  String
+  role      String
+  updatedAt DateTime @db.Date
+}
+
+model Category {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  color     String
+  createdAt DateTime @db.Date
+  name      String
+  updatedAt DateTime @db.Date
 }
 
 model Item {
-    id              String    @id @default(auto()) @map("_id") @db.ObjectId
-    name            String
-    category        String // e.g. Guitar, Drum, Keyboard
-    description     String?
-    brand           String?
-    countryOfOrigin String? // New: origin country
-    dateOfPurchase  DateTime? // New: when purchased
-    purchasedCost   Float? // New: cost at purchase
-    warrantyPeriod  String? // New: text like "2 years"
-    purchaser       String? // New: person or entity who bought it
-    pricePerDay     Float
-    isAvailable     Boolean   @default(true)
-    rentals         Rental[] // Relation to Rentals
-    createdAt       DateTime  @default(now())
-    updatedAt       DateTime  @updatedAt
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  brand           String
+  category        String
+  countryOfOrigin String
+  createdAt       DateTime @db.Date
+  dateOfPurchase  DateTime @db.Date
+  description     String
+  imageUrl        String
+  images          String[]
+  isAvailable     Boolean
+  name            String
+  pricePerDay     Int
+  purchasedCost   Int
+  updatedAt       DateTime @db.Date
+  warrantyPeriod  String
+  rentals   Rental[]
 }
 
 model Rental {
-    id        String       @id @default(auto()) @map("_id") @db.ObjectId
-    user      User         @relation(fields: [userId], references: [id])
-    userId    String       @db.ObjectId
-    item      Item         @relation(fields: [itemId], references: [id])
-    itemId    String       @db.ObjectId
-    startDate DateTime
-    endDate   DateTime
-    totalCost Float
-    status    RentalStatus @default(ACTIVE) // ACTIVE, COMPLETED, CANCELLED
-    createdAt DateTime     @default(now())
-    updatedAt DateTime     @updatedAt
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @db.Date
+  endDate   DateTime @db.Date
+  itemId    String   @db.ObjectId
+  startDate DateTime @db.Date
+  status    String
+  totalCost Int
+  updatedAt DateTime @db.Date
+  userId    String   @db.ObjectId
+  item   Item   @relation(fields: [itemId], references: [id])
 }
 
-enum UserRole {
-    CUSTOMER
-    STAFF
-    ADMIN
-}
-
-enum RentalStatus {
-    ACTIVE
-    COMPLETED
-    CANCELLED
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @db.Date
+  email     String   @unique
+  name      String
+  password  String
+  phone     String?
+  role      String
+  updatedAt DateTime @db.Date
 }
