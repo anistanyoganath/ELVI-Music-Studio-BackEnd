@@ -54,7 +54,10 @@ model Rental {
   totalCost Int
   updatedAt DateTime @db.Date
   userId    String   @db.ObjectId
-  item   Item   @relation(fields: [itemId], references: [id])
+
+  item      Item     @relation(fields: [itemId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+  invoice   Invoice?
 }
 
 model User {
@@ -66,4 +69,47 @@ model User {
   phone     String?
   role      String
   updatedAt DateTime @db.Date
+
+  rentals   Rental[]
+  invoices  Invoice[]
+}
+
+model Invoice {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+
+  invoiceNumber String   @unique
+  rentalId      String   @unique @db.ObjectId
+  userId        String   @db.ObjectId
+
+  issueDate     DateTime @db.Date
+  dueDate       DateTime @db.Date
+
+  subtotal      Int
+  lateFee       Int
+  discount      Int
+  totalAmount  Int
+
+  status        String
+
+  createdAt     DateTime @db.Date
+  updatedAt     DateTime @db.Date
+
+  rental        Rental   @relation(fields: [rentalId], references: [id])
+  user          User     @relation(fields: [userId], references: [id])
+
+  payments      Payment[]
+}
+
+
+model Payment {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+
+  invoiceId   String   @db.ObjectId
+  amount      Int
+  method      String   // CASH | CARD | BANK_TRANSFER
+  reference   String?  // transaction id / receipt no
+
+  createdAt   DateTime @db.Date
+
+  invoice     Invoice  @relation(fields: [invoiceId], references: [id])
 }

@@ -11,6 +11,9 @@ addItem.post("/", async (req, res) => {
     data: {
       ...data,
       dateOfPurchase: new Date(data.dateOfPurchase!),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      imageUrl: "",
     },
   });
 

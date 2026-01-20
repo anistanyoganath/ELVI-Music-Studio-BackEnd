@@ -8,6 +8,9 @@ export async function createAdmin() {
       name: "Super Admin",
       email: "admin@example.com",
       password: hashedPassword,
+      createdAt: new Date(),
+      role: "SUPER_ADMIN",
+      updatedAt: new Date(),
     },
   });
   console.log("Admin created:", admin);

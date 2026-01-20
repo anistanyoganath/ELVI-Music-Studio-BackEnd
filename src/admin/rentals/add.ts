@@ -8,7 +8,11 @@ addRental.post("/", async (req, res) => {
   const data: Prisma.RentalCreateInput = req.body;
 
   await prisma.rental.create({
-    data,
+    data: {
+      ...data,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
   });
 
   res.send(200);

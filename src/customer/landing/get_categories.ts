@@ -4,7 +4,7 @@ import { prisma } from "../../../DB/prisma_client";
 const getCategories = Router();
 
 getCategories.get("/", async (req, res) => {
-  const categories = await prisma.categories.findMany();
+  const categories = await prisma.category.findMany();
 
   res.json(categories);
 });
